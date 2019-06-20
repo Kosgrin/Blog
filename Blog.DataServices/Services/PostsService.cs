@@ -3,6 +3,8 @@ using Blog.DataServices.Models.Posts;
 using System;
 using System.Data.Entity;
 using System.Linq;
+using Blog.DataServices.Mapping;
+using System.Collections.Generic;
 
 namespace Blog.DataServices.Services
 {
@@ -23,7 +25,8 @@ namespace Blog.DataServices.Services
             {
                 Title = model.Title,
                 Body = model.Body,
-                Slug = model.Slug
+                Slug = model.Slug,
+                Date = DateTime.UtcNow
             };
 
             _set.Add(post);
@@ -32,40 +35,27 @@ namespace Blog.DataServices.Services
             model.Id = post.Id;
         }
 
-        public object FindBySlug(string slug)
+        public PostModel FindBySlug(string slug)
         {
-            var post = _set.SingleOrDefault(p => p.Slug == slug);
-
-            if (post != null)
-            {
-                return new PostModel()
-                {
-                    Id = post.Id,
-                    Body = post.Body,
-                    Slug = post.Slug,
-                    Title = post.Title
-                };
-            }
-
-            return null;
+            return _set.Where(x => x.Slug == slug)
+                .SelectPostModel()
+                .SingleOrDefault();
         }
 
         public PostModel FindById(Guid guid)
         {
-            var post = _set.SingleOrDefault(p => p.Id == guid);
-
-            if (post != null)
-            {
-                return new PostModel()
-                {
-                    Id = post.Id,
-                    Body = post.Body,
-                    Slug = post.Slug,
-                    Title = post.Title
-                };
-            }
-
-            return null;
+            return _set.Where(x => x.Id == guid)
+                .SelectPostModel()
+                .SingleOrDefault();
         }
+
+        public List<PostModel> GetLastPosts(int count)
+        {
+            return _set.OrderByDescending(p => p.Date)
+                .Take(count)
+                .SelectPostModel()
+                .ToList();
+        }
+
     }
 }
