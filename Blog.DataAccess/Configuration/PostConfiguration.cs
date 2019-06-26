@@ -18,7 +18,8 @@ namespace Blog.DataAccess.Configuration
                 .HasMaxLength(50)
                 .IsVariableLength()
                 .IsUnicode(false)
-                .IsRequired();
+				.IsRequired();
+			    
 
             Property(p => p.Title)
                 .HasMaxLength(100)
@@ -40,8 +41,13 @@ namespace Blog.DataAccess.Configuration
                 .IsUnique(true)
                 .IsClustered(false);
 
+            HasRequired(p => p.Author)
+                .WithMany(a => a.Posts)
+                .WillCascadeOnDelete(false);
+
             HasMany(p => p.Comments)
-                .WithRequired(c => c.Post);
+                .WithRequired(c => c.Post)
+                .WillCascadeOnDelete(false);
         }
     }
 }

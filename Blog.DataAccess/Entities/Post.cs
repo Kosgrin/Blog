@@ -6,7 +6,7 @@ namespace Blog.DataAccess.Entities
     public class Post
     {
         public Guid Id { get; set; }
-
+		
         public string Slug { get; set; }
 
         public string Title { get; set; }
@@ -14,6 +14,8 @@ namespace Blog.DataAccess.Entities
         public string Body { get; set; }
 
         public DateTime Date { get; set; }
+
+        public User Author { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
     }

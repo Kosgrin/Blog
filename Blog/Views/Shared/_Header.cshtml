@@ -8,8 +8,14 @@
             <a class="nav-link active text-light" href="/posts/add">Добавить пост</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active text-light" href="/posts/last-posts">Последние пости</a>
+            <a class="nav-link active text-light" href="/posts/last-posts">Последние посты</a>
         </li>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <li class="nav-item">
+                <a class="nav-link active text-light" href="#">@User.Identity.Name</a>
+            </li>
+        }
     </ul>
 
 </section>
